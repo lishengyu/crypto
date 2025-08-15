@@ -62,59 +62,31 @@ func (c *connection) clientAuthenticate(config *ClientConfig) error {
 		return err
 	}
 
-	// during the authentication phase the client first attempts the "none" method
-	// then any untried methods suggested by the server.
-	var tried []string
-	var lastMethods []string
-
+	// Directly use the Auth methods from config without trying other methods
+	var lastError error
 	sessionID := c.transport.getSessionID()
-	for auth := AuthMethod(new(noneAuth)); auth != nil; {
-		ok, methods, err := auth.auth(sessionID, config.User, c.transport, config.Rand, extensions)
+	for _, auth := range config.Auth {
+		ok, _, err := auth.auth(sessionID, config.User, c.transport, config.Rand, extensions)
 		if err != nil {
 			// On disconnect, return error immediately
 			if _, ok := err.(*disconnectMsg); ok {
 				return err
 			}
-			// We return the error later if there is no other method left to
-			// try.
-			ok = authFailure
+			// Store the error to return later if authentication fails
+			lastError = err
+			continue
 		}
 		if ok == authSuccess {
 			// success
 			return nil
-		} else if ok == authFailure {
-			if m := auth.method(); !contains(tried, m) {
-				tried = append(tried, m)
-			}
-		}
-		if methods == nil {
-			methods = lastMethods
-		}
-		lastMethods = methods
-
-		auth = nil
-
-	findNext:
-		for _, a := range config.Auth {
-			candidateMethod := a.method()
-			if contains(tried, candidateMethod) {
-				continue
-			}
-			for _, meth := range methods {
-				if meth == candidateMethod {
-					auth = a
-					break findNext
-				}
-			}
-		}
-
-		if auth == nil && err != nil {
-			// We have an error and there are no other authentication methods to
-			// try, so we return it.
-			return err
 		}
 	}
-	return fmt.Errorf("ssh: unable to authenticate, attempted methods %v, no supported methods remain", tried)
+
+	// If we reach here, all authentication methods have failed
+	if lastError != nil {
+		return lastError
+	}
+	return fmt.Errorf("ssh: unable to authenticate with provided methods")
 }
 
 func contains(list []string, e string) bool {
