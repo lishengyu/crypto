@@ -8,12 +8,40 @@ import (
 	"sync"
 	"time"
 
-	"github.com/lishengyu/crypto/ssh"
 	ssh2 "github.com/lishengyu/crypto/ssh"
+	"golang.org/x/crypto/ssh"
 )
 
+func testSSHPriConnection(server, user, password string, timeout int, wg *sync.WaitGroup, results chan<- string) {
+
+	defer wg.Done()
+
+	startTime := time.Now()
+	config := &ssh2.ClientConfig{
+		User: user,
+		Auth: []ssh2.AuthMethod{
+			ssh2.Password(password),
+		},
+		HostKeyCallback: ssh2.InsecureIgnoreHostKey(),
+		Timeout:         time.Duration(timeout) * time.Second,
+	}
+
+	var err error
+
+	_, err = ssh2.Dial("tcp", server, config)
+
+	time.Sleep(10 * time.Second)
+
+	duration := time.Since(startTime).Milliseconds()
+	if err != nil {
+		results <- fmt.Sprintf("❌ 连接失败 | 耗时: %dms | 错误: %v", duration, err)
+	} else {
+		results <- fmt.Sprintf("✅ 连接成功 | 耗时: %dms", duration)
+	}
+}
+
 // SSH连接测试函数
-func testSSHConnection(server, user, password string, timeout int, sshMethod string, wg *sync.WaitGroup, results chan<- string) {
+func testSSHStdConnection(server, user, password string, timeout int, wg *sync.WaitGroup, results chan<- string) {
 
 	defer wg.Done()
 
@@ -28,14 +56,8 @@ func testSSHConnection(server, user, password string, timeout int, sshMethod str
 	}
 
 	var err error
-	// 尝试连接
-	if sshMethod == "pri" {
-		_, err = ssh2.Dial("tcp", server, config)
 
-	} else if sshMethod == "std" {
-
-		_, err = ssh.Dial("tcp", server, config)
-	}
+	_, err = ssh.Dial("tcp", server, config)
 
 	time.Sleep(10 * time.Second)
 
@@ -84,7 +106,11 @@ func main() {
 	startTime := time.Now()
 	for i := 0; i < *concurrency; i++ {
 		wg.Add(1)
-		go testSSHConnection(*server, *user, *password, *timeout, *sshMethod, &wg, results)
+		if *sshMethod == "std" {
+			go testSSHStdConnection(*server, *user, *password, *timeout, &wg, results)
+		} else if *sshMethod == "pri" {
+			go testSSHPriConnection(*server, *user, *password, *timeout, &wg, results)
+		}
 	}
 
 	// 关闭结果通道的goroutine

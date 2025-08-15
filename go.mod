@@ -8,4 +8,8 @@ require (
 	golang.org/x/term v0.34.0
 )
 
+require golang.org/x/crypto v0.40.0
+
 require golang.org/x/text v0.28.0 // indirect
+
+replace github.com/lishengyu/crypto => ./

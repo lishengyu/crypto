@@ -11,7 +11,7 @@ import (
 	. "github.com/mmcloughlin/avo/reg"
 )
 
-//go:generate go run . -out ../sum_amd64.s -pkg poly1305
+//go:generate go run . -out ../sum_amd64.s -pkg github.com/lishengyu/crypto/internal/poly1305
 
 func main() {
 	Package("github.com/lishengyu/crypto/internal/poly1305")
