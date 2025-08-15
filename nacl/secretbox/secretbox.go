@@ -37,7 +37,7 @@ package secretbox
 import (
 	"github.com/lishengyu/crypto/internal/alias"
 	"github.com/lishengyu/crypto/internal/poly1305"
-	"golang.org/x/crypto/salsa20/salsa"
+	"github.com/lishengyu/crypto/salsa20/salsa"
 )
 
 // Overhead is the number of bytes of overhead when boxing a message.

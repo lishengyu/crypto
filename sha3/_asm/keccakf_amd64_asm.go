@@ -8,10 +8,10 @@
 package main
 
 import (
+	_ "github.com/lishengyu/crypto/sha3"
 	. "github.com/mmcloughlin/avo/build"
 	. "github.com/mmcloughlin/avo/operand"
 	. "github.com/mmcloughlin/avo/reg"
-	_ "golang.org/x/crypto/sha3"
 )
 
 //go:generate go run . -out ../keccakf_amd64.s -pkg sha3
@@ -100,7 +100,7 @@ const (
 )
 
 func main() {
-	Package("golang.org/x/crypto/sha3")
+	Package("github.com/lishengyu/crypto/sha3")
 	ConstraintExpr("amd64,!purego,gc")
 	keccakF1600()
 	Generate()

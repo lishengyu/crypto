@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/lishengyu/crypto/ssh"
 	ssh2 "github.com/lishengyu/crypto/ssh"
-	"golang.org/x/crypto/ssh"
 )
 
 // SSH连接测试函数

@@ -5,10 +5,10 @@
 package main
 
 import (
+	_ "github.com/lishengyu/crypto/sha3"
 	. "github.com/mmcloughlin/avo/build"
 	. "github.com/mmcloughlin/avo/operand"
 	. "github.com/mmcloughlin/avo/reg"
-	_ "golang.org/x/crypto/sha3"
 )
 
 //go:generate go run . -out ../sum_amd64.s -pkg poly1305

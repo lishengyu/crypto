@@ -14,8 +14,8 @@ import (
 	"testing"
 
 	"github.com/lishengyu/crypto/internal/testenv"
-	"golang.org/x/crypto/ssh"
-	"golang.org/x/crypto/ssh/testdata"
+	"github.com/lishengyu/crypto/ssh"
+	"github.com/lishengyu/crypto/ssh/testdata"
 )
 
 func sshClient(t *testing.T) string {
