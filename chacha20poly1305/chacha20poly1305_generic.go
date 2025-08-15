@@ -7,7 +7,7 @@ package chacha20poly1305
 import (
 	"encoding/binary"
 
-	"golang.org/x/crypto/chacha20"
+	"github.com/lishengyu/crypto/chacha20"
 	"golang.org/x/crypto/internal/alias"
 	"golang.org/x/crypto/internal/poly1305"
 )

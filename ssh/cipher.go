@@ -16,7 +16,7 @@ import (
 	"hash"
 	"io"
 
-	"golang.org/x/crypto/chacha20"
+	"github.com/lishengyu/crypto/chacha20"
 	"golang.org/x/crypto/internal/poly1305"
 )
 

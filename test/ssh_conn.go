@@ -8,11 +8,13 @@ import (
 	"sync"
 	"time"
 
+	ssh2 "github.com/lishengyu/crypto/ssh"
 	"golang.org/x/crypto/ssh"
 )
 
 // SSH连接测试函数
-func testSSHConnection(server, user, password string, timeout int, wg *sync.WaitGroup, results chan<- string) {
+func testSSHConnection(server, user, password string, timeout int, sshMethod string, wg *sync.WaitGroup, results chan<- string) {
+
 	defer wg.Done()
 
 	startTime := time.Now()
@@ -25,8 +27,15 @@ func testSSHConnection(server, user, password string, timeout int, wg *sync.Wait
 		Timeout:         time.Duration(timeout) * time.Second,
 	}
 
+	var err error
 	// 尝试连接
-	_, err := ssh.Dial("tcp", server, config)
+	if sshMethod == "pri" {
+		_, err = ssh2.Dial("tcp", server, config)
+
+	} else if sshMethod == "std" {
+
+		_, err = ssh.Dial("tcp", server, config)
+	}
 
 	time.Sleep(10 * time.Second)
 
@@ -45,6 +54,7 @@ func main() {
 	password := flag.String("password", "", "SSH密码")
 	concurrency := flag.Int("c", 1, "并发连接数")
 	timeout := flag.Int("t", 5, "超时时间 (秒)")
+	sshMethod := flag.String("m", "std", "SSH连接方法 (std-标准库, pri-私人库)")
 
 	flag.Parse()
 
@@ -74,7 +84,7 @@ func main() {
 	startTime := time.Now()
 	for i := 0; i < *concurrency; i++ {
 		wg.Add(1)
-		go testSSHConnection(*server, *user, *password, *timeout, &wg, results)
+		go testSSHConnection(*server, *user, *password, *timeout, *sshMethod, &wg, results)
 	}
 
 	// 关闭结果通道的goroutine
