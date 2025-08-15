@@ -9,8 +9,8 @@ import (
 	"math/big"
 	"testing"
 
-	"golang.org/x/crypto/cryptobyte"
-	"golang.org/x/crypto/cryptobyte/asn1"
+	"github.com/lishengyu/crypto/cryptobyte"
+	"github.com/lishengyu/crypto/cryptobyte/asn1"
 )
 
 func TestECDSA(t *testing.T) {

@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/crypto/ssh/testdata"
+	"github.com/lishengyu/crypto/ssh/testdata"
 )
 
 func TestParseCert(t *testing.T) {

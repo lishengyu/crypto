@@ -23,8 +23,8 @@ import (
 	"text/template"
 	"time"
 
-	"golang.org/x/crypto/sha3"
-	"golang.org/x/crypto/ssh"
+	"github.com/lishengyu/crypto/sha3"
+	"github.com/lishengyu/crypto/ssh"
 )
 
 const (
