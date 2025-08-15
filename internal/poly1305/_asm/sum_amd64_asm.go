@@ -14,7 +14,7 @@ import (
 //go:generate go run . -out ../sum_amd64.s -pkg poly1305
 
 func main() {
-	Package("golang.org/x/crypto/internal/poly1305")
+	Package("github.com/lishengyu/crypto/internal/poly1305")
 	ConstraintExpr("gc,!purego")
 	update()
 	Generate()

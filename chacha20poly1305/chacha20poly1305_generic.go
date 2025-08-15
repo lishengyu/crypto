@@ -8,8 +8,8 @@ import (
 	"encoding/binary"
 
 	"github.com/lishengyu/crypto/chacha20"
-	"golang.org/x/crypto/internal/alias"
-	"golang.org/x/crypto/internal/poly1305"
+	"github.com/lishengyu/crypto/internal/alias"
+	"github.com/lishengyu/crypto/internal/poly1305"
 )
 
 func writeWithPadding(p *poly1305.MAC, b []byte) {

@@ -12,7 +12,7 @@ import (
 	"errors"
 	"math/bits"
 
-	"golang.org/x/crypto/internal/alias"
+	"github.com/lishengyu/crypto/internal/alias"
 )
 
 const (

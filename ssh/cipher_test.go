@@ -13,7 +13,7 @@ import (
 	"testing"
 
 	"github.com/lishengyu/crypto/chacha20"
-	"golang.org/x/crypto/internal/poly1305"
+	"github.com/lishengyu/crypto/internal/poly1305"
 )
 
 func TestDefaultCiphersExist(t *testing.T) {
